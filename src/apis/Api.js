@@ -3,7 +3,7 @@ import axios from "axios";
 //creating backend configuration
 
 const Api = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: "http://localhost:5500",
     withCredentials: true,
     headers :{
         "Content-Type": "application/json"
