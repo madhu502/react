@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { registerUserApi } from "../../apis/Api";
 
 const Register = () => {
   //Logic section
@@ -85,7 +86,23 @@ const Register = () => {
     if (!isValidated) {
       return;
     }
-    console.log(firstname, lastname, email, password, confirmPassword);
+    
+    // sending request to the api
+    
+    //Making json object
+    const data ={
+      "firstName":firstname,
+      "lastName":lastname,
+      "email":email,
+      "password":password
+    }
+
+    registerUserApi(data).then((res)=>{
+      console.log(res.data)
+    })
+
+
+
   };
   return (
     <>

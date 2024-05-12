@@ -3,17 +3,17 @@ import axios from "axios";
 //creating backend configuration
 
 const Api = axios.create({
-    baseURL: "http://localhost:5500",
-    withCredentials: true,
-    headers :{
-        "Content-Type": "application/json"
-    }
-
+  baseURL: "http://localhost:5500",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 //Test Api
-export const testApi =()=> Api.get("/test");
+export const testApi = () => Api.get('/test');
 
-//http://localhost:5000/test
+// Register API
+export const registerUserApi = (data) => Api.post('/api/user/create',data)
 
-
+//http://localhost:5500/test
