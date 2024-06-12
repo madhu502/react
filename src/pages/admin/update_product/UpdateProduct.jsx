@@ -1,31 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getSingleProductApi } from "../../../apis/Api";
+import { toast } from "react-toastify";
+import { getSingleProductApi, updateProductApi } from "../../../apis/Api";
 
 const UpdateProduct = () => {
   //get id from url
-  const { id } = useParams()
+  const { id } = useParams();
 
   //get product information (Backend)
-  useEffect (()=>{
-    getSingleProductApi(id).then((res)=>{
-      console.log(res.data)
+  useEffect(() => {
+    getSingleProductApi(id)
+      .then((res) => {
+        console.log(res.data);
 
-      //res -> data (message, success, product->(pn,pp,pc))
-      //res.data.poduct.productName
-      setProductName(res.data.product.productName)
-      setProductPrice(res.data.product.productPrice)
-      setProductCategory(res.data.product.productCategory)
-      setProductDescription(res.data.product.productDescription)
-      setOldImage(res.data.product.productImage)
-
-
-
-    }).catch((error)=>{
-      console.log(error)
-    })
-
-  },[])
+        //res -> data (message, success, product->(pn,pp,pc))
+        //res.data.poduct.productName
+        setProductName(res.data.product.productName);
+        setProductPrice(res.data.product.productPrice);
+        setProductCategory(res.data.product.productCategory);
+        setProductDescription(res.data.product.productDescription);
+        setOldImage(res.data.product.productImage);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   // fill all the info in each fields
   //
@@ -48,6 +47,35 @@ const UpdateProduct = () => {
     setPreviewNewImage(URL.createObjectURL(file));
   };
 
+  //update product
+  const handleupdate = (e) => {
+    e.preventDefault();
+
+    //make a form data
+    const formData = new FormData();
+    formData.append("productName", productName);
+    formData.append("productPrice", productPrice);
+    formData.append("productCategory", productCategory);
+    formData.append("productDescription", productDescription);
+
+    if (previewNewImage) {
+      formData.append("productImage", productNewImage);
+    }
+
+    //Api call
+    updateProductApi(id, formData)
+      .then((res) => {
+        if (res.status === 201) {
+          toast.success(res.data.message);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
+
   return (
     <>
       <div className="container mt-3">
@@ -57,8 +85,8 @@ const UpdateProduct = () => {
         <div className="d-flex gap-3">
           <form action="">
             <label htmlFor="">Product Name</label>
-            <input value={productName}
-
+            <input
+              value={productName}
               onChange={(e) => setProductName(e.target.value)}
               className="form-control"
               type="text"
@@ -68,7 +96,8 @@ const UpdateProduct = () => {
             <label className="mt-2" htmlFor="">
               Product Price
             </label>
-            <input value={productPrice}
+            <input
+              value={productPrice}
               onChange={(e) => setProductPrice(e.target.value)}
               className="form-control"
               type="number"
@@ -76,7 +105,7 @@ const UpdateProduct = () => {
             />
 
             <label className="mt-2">Choose category</label>
-            <select 
+            <select
               value={productCategory}
               onChange={(e) => setProductCategory(e.target.value)}
               className="form-control"
@@ -89,38 +118,49 @@ const UpdateProduct = () => {
 
             <label className="mt-2">Enter description</label>
             <textarea
-             value={productDescription}
+              value={productDescription}
               onChange={(e) => setProductDescription(e.target.value)}
               className="form-control"
             ></textarea>
 
             <label className="mt-2">Choose product Image</label>
             <input
-              
               onChange={handleImage}
               type="file"
               className="form-control"
             />
 
-            <button className="btn btn-danger w-100 mt-2">
+            <button
+              onClick={handleupdate}
+              className="btn btn-danger w-100 mt-2"
+            >
               Update Product
             </button>
           </form>
 
           <div className="image section">
             <h6>Previewing old image</h6>
-            <img height={'150px'} width={'300px'} className="image-fluid rounded-4 object-fit-cover" src={`http://localhost:5500/products/${oldImage}`}alt="" />
+            <img
+              height={"150px"}
+              width={"300px"}
+              className="image-fluid rounded-4 object-fit-cover"
+              src={`http://localhost:5500/products/${oldImage}`}
+              alt=""
+            />
 
-            {
-                previewNewImage && <>
+            {previewNewImage && (
+              <>
                 <h6 className="mt-3"> New image</h6>
-                <img height={'150px'} width={'300px'} className="image-fluid rounded-4 object-fit-cover" src={previewNewImage} alt="" />
-                </>
-            }
-          
-
+                <img
+                  height={"150px"}
+                  width={"300px"}
+                  className="image-fluid rounded-4 object-fit-cover"
+                  src={previewNewImage}
+                  alt=""
+                />
+              </>
+            )}
           </div>
-
         </div>
       </div>
     </>

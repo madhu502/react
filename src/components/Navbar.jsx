@@ -12,6 +12,7 @@ const Navbar = () => {
           <div className="container-fluid">
             <a className="navbar-brand" href="/#">
               Hamro <span className="text-danger">Market</span>
+              <img src="/assets/images/logo.png" alt="" />
             </a>
             <button
               className="navbar-toggler"
