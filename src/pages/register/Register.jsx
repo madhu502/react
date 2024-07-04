@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { registerUserApi } from "../../apis/Api";
 import { toast } from "react-toastify";
+import { registerUserApi } from "../../apis/Api";
 
 const Register = () => {
   //Logic section
@@ -11,6 +11,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("");
 
   // UseState for error messages
   const [firstNameError, setFirstNameError] = useState("");
@@ -18,6 +19,7 @@ const Register = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   // Make functions for each changing the values
 
@@ -37,6 +39,9 @@ const Register = () => {
   };
   const handleConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
+  };
+  const handlePhone = (e) => {
+    setPhone(e.target.value);
   };
 
   //validation
@@ -58,6 +63,10 @@ const Register = () => {
     // validate the email
     if (email.trim() === "") {
       setEmailError("Email is required");
+      isValid = false;
+    }
+    if (phone.trim() === "") {
+      setPhoneError("Phone number is required");
       isValid = false;
     }
 
@@ -87,30 +96,27 @@ const Register = () => {
     if (!isValidated) {
       return;
     }
-    
+
     // sending request to the api
-    
+
     //Making json object
-    const data ={
-      "firstName":firstname,
-      "lastName":lastname,
-      "email":email,
-      "password":password
-    }
+    const data = {
+      firstName: firstname,
+      lastName: lastname,
+      email: email,
+      password: password,
+      phone: phone,
+    };
 
-    registerUserApi(data).then((res)=>{
-
+    registerUserApi(data).then((res) => {
       // Received Data: success, message
 
       if (res.data.success === false) {
-        toast.error(res.data.message)
-      }else{
-        toast.success(res.data.message)
+        toast.error(res.data.message);
+      } else {
+        toast.success(res.data.message);
       }
-    })
-
-
-
+    });
   };
   return (
     <>
@@ -142,6 +148,16 @@ const Register = () => {
             placeholder="Enter your email"
           />
           {emailError && <p className="text-danger">{emailError}</p>}
+
+          <label className="mt-2">Phone Number : {phone}</label>
+          <input
+            onChange={handlePhone}
+            type="text"
+            className="form-control"
+            placeholder="Enter your phone number"
+          />
+          {phoneError && <p className="text-danger">{phoneError}</p>}
+
           <label className="mt-2">Password :{password} </label>
           <input
             onChange={handlePassword}

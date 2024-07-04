@@ -39,10 +39,15 @@ export const getSingleProductApi = (id) =>
 
 // delete product api
 export const deleteProductApi = (id) =>
-  Api.delete(`/api/product/delete_product/${id}`,config);
+  Api.delete(`/api/product/delete_product/${id}`, config);
 
 // update product api
 export const updateProductApi = (id, data) =>
-  Api.put(`/api/product/update_product/${id}`, data,config);
+  Api.put(`/api/product/update_product/${id}`, data, config);
 
+// forgot password
+export const forgotPasswordApi = (data) =>
+  Api.post("api/user/forgot_password", data);
+
+export const verifyOtpApi = (data) => Api.post("api/user/verify_otp", data);
 //http://localhost:5500/test
